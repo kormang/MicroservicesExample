@@ -12,6 +12,7 @@ urlpatterns = [
     path('', include(router.urls)),
     path('trips/', views.TripCustomView.as_view()),
     path('trips/end_trip/<str:trip_id>/', views.end_trip),
-    path('trips/assign_driver/', views.assign_driver),
+    path('trips/<str:trip_id>/', views.get_trip),
+    path('assign_driver/', views.assign_driver, name='assign_driver'),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

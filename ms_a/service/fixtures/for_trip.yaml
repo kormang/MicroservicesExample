@@ -1,0 +1,28 @@
+
+- model: service.Car
+  pk: 1001
+  fields:
+    model: Yugo
+
+- model: service.Car
+  pk: 1002
+  fields:
+    model: Golf 2
+
+- model: service.Driver
+  pk: 2001
+  fields:
+    name: Radovan
+
+- model: service.Driver
+  pk: 2002
+  fields:
+    name: Vesna
+
+- model: service.Trip
+  pk: 0eec6b77-d06d-4ccc-bf74-5100cb92db74
+  fields:
+    start_time: 2022-05-09 12:44:00.000000Z
+    driver: 2002
+    car: 1001
+

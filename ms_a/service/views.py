@@ -27,11 +27,11 @@ class DriverViewSet(viewsets.ModelViewSet):
 class TripCustomView(views.APIView):
     def get(self, request):
         filter_args = {}
-        if hasattr(request, 'car_id'):
-            filter_args['car'] = request.car_id
+        if 'car_id' in request.GET:
+            filter_args['car'] = request.GET['car_id']
 
-        if hasattr(request, 'driver_id'):
-            filter_args['driver'] = request.driver_id
+        if 'driver_id' in request.GET:
+            filter_args['driver'] = request.GET['driver_id']
 
         queryset = Trip.objects.filter(**filter_args)
         ser = TripSerializer(instance=queryset, many=True)
@@ -51,6 +51,17 @@ class TripCustomView(views.APIView):
         return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(('GET',))
+@renderer_classes((JSONRenderer,))
+def get_trip(request, trip_id):
+    try:
+        trip = Trip.objects.get(id=trip_id)
+        return Response(TripSerializer(instance=trip).data)
+    except Trip.DoesNotExist:
+        return Response(
+            {"res": f"Trip with id {str(trip_id)} doesn't exist!"},
+            status=status.HTTP_404_NOT_FOUND)
+
 @api_view(('PUT',))
 @renderer_classes((JSONRenderer,))
 def end_trip(request, trip_id):
@@ -67,7 +78,7 @@ def end_trip(request, trip_id):
     except Trip.DoesNotExist:
         return Response(
             {"res": f"Trip with id {str(trip_id)} doesn't exist!"},
-            status=status.HTTP_400_BAD_REQUEST)
+            status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(('PUT',))

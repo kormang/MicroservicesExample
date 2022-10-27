@@ -82,7 +82,7 @@ class TripCustomViewTests(APITestCase):
         self.assertEqual(response.data[0]['id'],
             '0eec6b77-d06d-4ccc-bf74-5100cb92db74')
 
-    @patch('service.events.TripEventEmmitter.emit')
+    @patch('service.signals.publish_to_trips')
     def test_create_and_retrieve(self, mock):
         response = self.client.post('/trips/',
             {'car_id': 1002, 'driver_id': 2001})
@@ -113,7 +113,7 @@ class TripCustomViewTests(APITestCase):
         self.assertEqual(result_data['car'], 1002)
 
 
-    @patch('service.events.TripEventEmmitter.emit')
+    @patch('service.signals.publish_to_trips')
     def test_end_trip(self, mock):
         id = '0eec6b77-d06d-4ccc-bf74-5100cb92db74'
         response = self.client.get(f'/trips/{id}/')
@@ -137,7 +137,6 @@ class TripCustomViewTests(APITestCase):
 
         response = self.client.put(f'/trips/end_trip/{id}/')
         self.assertEqual(response.status_code, 400)
-
 
 class DriverAssignmentViewTests(APITestCase):
     fixtures = ['for_trip.yaml']

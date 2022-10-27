@@ -6,8 +6,6 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework import status
 
-from .events import TripEventEmmitter
-
 from .models import Car, Driver, Trip
 from .serializers import CarSerializer, DriverSerializer, TripSerializer
 
@@ -46,7 +44,6 @@ class TripCustomView(views.APIView):
         ser = TripSerializer(data=data)
         if ser.is_valid():
             ser.save()
-            TripEventEmmitter().emit('started', ser.data)
             return Response(ser.data, status=status.HTTP_201_CREATED)
 
         return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -76,7 +73,6 @@ def end_trip(request, trip_id):
         trip.end_time = timezone.now()
         trip.save()
         response_data = TripSerializer(instance=trip).data
-        TripEventEmmitter().emit('ended', response_data)
         return Response(response_data)
     except Trip.DoesNotExist:
         return Response(

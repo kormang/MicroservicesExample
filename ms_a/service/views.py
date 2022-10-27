@@ -1,5 +1,3 @@
-from django.shortcuts import render
-
 from django.http import HttpResponse
 from django.utils import timezone
 from rest_framework import viewsets, views
@@ -7,6 +5,8 @@ from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework import status
+
+from .events import TripEventEmmitter
 
 from .models import Car, Driver, Trip
 from .serializers import CarSerializer, DriverSerializer, TripSerializer
@@ -46,6 +46,7 @@ class TripCustomView(views.APIView):
         ser = TripSerializer(data=data)
         if ser.is_valid():
             ser.save()
+            TripEventEmmitter().emit('started', ser.data)
             return Response(ser.data, status=status.HTTP_201_CREATED)
 
         return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -74,7 +75,9 @@ def end_trip(request, trip_id):
 
         trip.end_time = timezone.now()
         trip.save()
-        return Response(TripSerializer(instance=trip).data)
+        response_data = TripSerializer(instance=trip).data
+        TripEventEmmitter().emit('ended', response_data)
+        return Response(response_data)
     except Trip.DoesNotExist:
         return Response(
             {"res": f"Trip with id {str(trip_id)} doesn't exist!"},

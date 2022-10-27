@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from rest_framework.test import APITestCase
 from django.urls import reverse
+from unittest.mock import patch
 
 
 class CarViewSetTests(APITestCase):
@@ -81,7 +82,8 @@ class TripCustomViewTests(APITestCase):
         self.assertEqual(response.data[0]['id'],
             '0eec6b77-d06d-4ccc-bf74-5100cb92db74')
 
-    def test_create_and_retrieve(self):
+    @patch('service.events.TripEventEmmitter.emit')
+    def test_create_and_retrieve(self, mock):
         response = self.client.post('/trips/',
             {'car_id': 1002, 'driver_id': 2001})
         self.assertEqual(response.status_code, 201)
@@ -93,6 +95,7 @@ class TripCustomViewTests(APITestCase):
         self.assertLess(
             parse_datetime(new_trip['start_time']),
             timezone.now())
+        mock.assert_called_once_with('started', new_trip)
 
         response = self.client.get('/trips/')
         self.assertEqual(response.status_code, 200)
@@ -110,7 +113,8 @@ class TripCustomViewTests(APITestCase):
         self.assertEqual(result_data['car'], 1002)
 
 
-    def test_end_trip(self):
+    @patch('service.events.TripEventEmmitter.emit')
+    def test_end_trip(self, mock):
         id = '0eec6b77-d06d-4ccc-bf74-5100cb92db74'
         response = self.client.get(f'/trips/{id}/')
         trip = json.loads(response.content)
@@ -122,6 +126,7 @@ class TripCustomViewTests(APITestCase):
 
         response = self.client.put(f'/trips/end_trip/{id}/')
         self.assertEqual(response.status_code, 200)
+        mock.assert_called_once_with('ended', json.loads(response.content))
 
         response = self.client.get(f'/trips/{id}/')
         trip = json.loads(response.content)

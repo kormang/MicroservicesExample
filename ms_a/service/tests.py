@@ -6,6 +6,18 @@ from django.urls import reverse
 from unittest.mock import patch
 
 
+def transform_trip(trip_data, driver_name, car_model):
+    result = trip_data.copy()
+    result['car_id'] = result['car']
+    del result['car']
+    result['driver_id'] = result['driver']
+    del result['driver']
+    result['driver_name'] = driver_name
+    result['car_model'] = car_model
+
+    return result
+
+
 class CarViewSetTests(APITestCase):
     def test_no_items(self):
         response = self.client.get('/cars/')
@@ -95,7 +107,8 @@ class TripCustomViewTests(APITestCase):
         self.assertLess(
             parse_datetime(new_trip['start_time']),
             timezone.now())
-        mock.assert_called_once_with('started', new_trip)
+        mock.assert_called_once_with('started',
+            transform_trip(new_trip, 'Radovan', 'Golf 2'))
 
         response = self.client.get('/trips/')
         self.assertEqual(response.status_code, 200)
@@ -126,7 +139,8 @@ class TripCustomViewTests(APITestCase):
 
         response = self.client.put(f'/trips/end_trip/{id}/')
         self.assertEqual(response.status_code, 200)
-        mock.assert_called_once_with('ended', json.loads(response.content))
+        mock.assert_called_once_with('ended',
+            transform_trip(json.loads(response.content), 'Vesna', 'Yugo'))
 
         response = self.client.get(f'/trips/{id}/')
         trip = json.loads(response.content)

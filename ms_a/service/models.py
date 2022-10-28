@@ -18,12 +18,14 @@ class Trip(models.Model):
     driver = models.ForeignKey(
         Driver,
         on_delete=models.RESTRICT,
-        null=False
+        null=False,
+        related_name='driver'
     )
     car = models.ForeignKey(
         Car,
         on_delete=models.RESTRICT,
-        null=False
+        null=False,
+        related_name='car'
     )
     start_time = models.DateTimeField(auto_now_add=True, null=False)
     end_time = models.DateTimeField(null=True)

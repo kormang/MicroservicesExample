@@ -9,6 +9,7 @@ psycopg2-binary = "*"
 djangorestframework = "*"
 pyaml = "*"
 pika = "*"
+schedule = "*"
 
 [dev-packages]
 

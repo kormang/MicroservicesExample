@@ -8,3 +8,10 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
 
+
+def initialize():
+    import service.simulator
+    import service.consumers
+    import service.producers
+
+initialize()

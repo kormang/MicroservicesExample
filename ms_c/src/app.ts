@@ -1,15 +1,9 @@
 import Fastify, { FastifyInstance } from 'fastify';
-import { getDriverPenaltySchema } from './schemas/driver-penalty';
+import driverPenaltyRoutes from './routes/driver-penalty';
 
 const server: FastifyInstance = Fastify({});
 
-server.get(
-    '/driver-penalty/',
-    { schema: getDriverPenaltySchema },
-    async (request, reply) => {
-        return { penalties: [] };
-    }
-);
+server.register(driverPenaltyRoutes);
 
 const start = async (): Promise<void> => {
     try {

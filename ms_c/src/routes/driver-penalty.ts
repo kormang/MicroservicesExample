@@ -1,12 +1,30 @@
-import { FastifyInstance } from 'fastify';
-import { getDriverPenaltySchema } from '../schemas/driver-penalty';
+import { ResponseWithDriverPenalties } from '../schemas/driver-penalties';
+import { JsonSchemaToTsProvider } from '@fastify/type-provider-json-schema-to-ts';
+import { findPenaltiesForDriver } from '../controllers/driver-penalties';
 
 export default async function routes(fastify: FastifyInstance) {
-    fastify.get(
+    const f = fastify.withTypeProvider<JsonSchemaToTsProvider>();
+
+    f.get(
         '/driver-penalty/',
-        { schema: getDriverPenaltySchema },
-        async (request, reply) => {
-            return { penalties: [] };
+        {
+            schema: {
+                querystring: {
+                    type: 'object',
+                    properties: {
+                        driver_id: { type: 'number' },
+                    },
+                    required: ['driver_id'],
+                } as const,
+                response: ResponseWithDriverPenalties,
+            },
+        },
+        async (request) => {
+            const penalties = findPenaltiesForDriver(
+                fastify.mongo,
+                request.query.driver_id
+            );
+            return { penalties };
         }
     );
 }

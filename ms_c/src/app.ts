@@ -1,8 +1,11 @@
-import Fastify, { FastifyInstance } from 'fastify';
+import Fastify from 'fastify';
+import { JsonSchemaToTsProvider } from '@fastify/type-provider-json-schema-to-ts';
 import driverPenaltyRoutes from './routes/driver-penalty';
+import mongoPlugin from './database/mongo';
 
-const server: FastifyInstance = Fastify({});
+const server = Fastify().withTypeProvider<JsonSchemaToTsProvider>();
 
+server.register(mongoPlugin);
 server.register(driverPenaltyRoutes);
 
 const start = async (): Promise<void> => {

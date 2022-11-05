@@ -8,6 +8,9 @@
     "outDir": "dist",
     "strict": true
   },
+  "paths": {
+    "*": ["types/*.d.ts"]
+  },
   "lib": ["es2015"]
 }
 

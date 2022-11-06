@@ -1,18 +1,18 @@
-export const DriverPenaltiesSchema = {
+import { DriverPenalty } from './driver-penalty';
+
+export const DriverPenalties = {
     type: 'array',
     items: {
-        type: 'object',
-        properties: {},
-        required: [],
+        type: { $ref: DriverPenalty },
     },
-};
+} as const;
 
 export const ResponseWithDriverPenalties = {
     200: {
         type: 'object',
         properties: {
-            penalties: DriverPenaltiesSchema,
+            penalties: DriverPenalties,
         },
         required: ['penalties'],
     },
-};
+} as const;

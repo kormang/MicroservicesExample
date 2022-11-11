@@ -1,17 +1,59 @@
-import { eventEmmiter } from '../../../src/consumers/trip_status';
+import { DriverPenaltyModel } from '../../../src/model/driver-penalty';
+import { DriverPenalty } from '../../../src/schema-types';
+import { getCollections } from '../../../src/services/database.service';
+import { waitFor } from '../../utils';
+import { setupAmpqForTest } from '../../utils/ampq';
+import { connectAndClearDb } from '../../utils/db';
 
 describe('Trip status consumer', () => {
-    it('consumes trip status and emits event', () => {
-        const callback = jest.fn();
-        eventEmmiter.addListener('trip_status', callback);
-        expect(callback).not.toBeCalled();
-        const tripStatus = {
-            speed: 83,
-            driver_name: 'Danilo',
-            car_model: 'Fico',
-            driver_id: 10,
-            car_id: 20,
-            trip_id: '03c8d031-4093-41e2-88e0-700cf78873ac',
-        };
+    it('consumes trip status and write it to db', async () => {
+        const [conn, amqpTestConnection] = await setupAmpqForTest();
+        await connectAndClearDb();
+        try {
+            expect(
+                await getCollections().penalties?.countDocuments()
+            ).toBeFalsy();
+
+            const tripStatus = {
+                speed: 83,
+                driver_name: 'Danilo',
+                car_model: 'Fico',
+                driver_id: 10,
+                car_id: 20,
+                trip_id: '03c8d031-4093-41e2-88e0-700cf78873ac',
+            };
+
+            expect(
+                amqpTestConnection.send('trip_status', tripStatus)
+            ).toBeTruthy();
+
+            const condition = async () =>
+                Number(await getCollections().penalties?.countDocuments()) ===
+                1;
+            await waitFor(condition);
+
+            const penalties = await getCollections()
+                .penalties?.find()
+                .toArray();
+
+            expect(penalties).not.toBe(undefined);
+            if (typeof penalties === 'undefined') {
+                throw 'undefined';
+            }
+            expect(penalties?.length).toBe(1);
+            expect(penalties).toEqual([
+                {
+                    _id: penalties[0]._id,
+                    createdAt: penalties[0].createdAt,
+                    penaltyScore: 26,
+                    driverId: 10,
+                    driverName: 'Danilo',
+                    tripId: '03c8d031-4093-41e2-88e0-700cf78873ac',
+                },
+            ]);
+        } finally {
+            await amqpTestConnection.connection.close();
+            await conn.connection.close();
+        }
     });
 });

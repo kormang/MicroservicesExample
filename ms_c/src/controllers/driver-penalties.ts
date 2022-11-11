@@ -1,5 +1,14 @@
-export function findPenaltiesForDriver(mongo: Mongo, driverId: number) {
-    const penaltiesCollection = mongo.db?.collection('driver_penalties');
-    const penalties = penaltiesCollection?.find({ driverId });
-    return penalties;
+import { DriverPenaltyModel } from '../model/driver-penalty';
+import { tripStatusToDriverPenalty } from '../policies';
+import { TripStatus } from '../schema-types';
+import { getCollections } from '../services/database.service';
+
+export function findPenaltiesForDriver(driverId: number) {
+    return getCollections().penalties?.find({ driverId }).toArray();
+}
+
+export async function applyPenaltyByTripStatus(tripStatus: TripStatus) {
+    const penalty = tripStatusToDriverPenalty(tripStatus);
+    const model = DriverPenaltyModel.from(penalty);
+    await getCollections().penalties?.insertOne(model);
 }

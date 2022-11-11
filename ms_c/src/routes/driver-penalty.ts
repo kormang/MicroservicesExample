@@ -20,10 +20,7 @@ export default async function routes(fastify: FastifyInstance) {
             },
         },
         async (request) => {
-            const penalties = findPenaltiesForDriver(
-                fastify.mongo,
-                request.query.driver_id
-            );
+            const penalties = findPenaltiesForDriver(request.query.driver_id);
             return { penalties };
         }
     );

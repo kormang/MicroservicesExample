@@ -15,6 +15,4 @@ declare global {
         FastifyBaseLogger,
         JsonSchemaToTsProvider
     >;
-
-    type Mongo = FI['mongo'];
 }

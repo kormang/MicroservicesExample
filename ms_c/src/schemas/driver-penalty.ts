@@ -2,6 +2,7 @@ export const DriverPenalty = {
     $id: 'DriverPenalty',
     type: 'object',
     properties: {
+        _id: { type: 'string', format: 'object-id' },
         penaltyScore: { type: 'number' },
         driverId: { type: 'number' },
         driverName: { type: 'string' },

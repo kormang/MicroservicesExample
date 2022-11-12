@@ -4,7 +4,11 @@ import { TripStatus } from '../schema-types';
 import { getCollections } from '../services/database.service';
 
 export function findPenaltiesForDriver(driverId: number) {
-    return getCollections().penalties?.find({ driverId }).toArray();
+    const { penalties } = getCollections();
+    if (!penalties) {
+        throw new Error('Penalties collection missing.');
+    }
+    return penalties.find<DriverPenaltyModel>({ driverId }).toArray();
 }
 
 export async function applyPenaltyByTripStatus(tripStatus: TripStatus) {

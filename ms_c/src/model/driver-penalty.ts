@@ -1,7 +1,7 @@
 import { DriverPenalty } from '../schema-types';
 import { ObjectId } from 'mongodb';
 
-export class DriverPenaltyModel implements DriverPenalty {
+export class DriverPenaltyModel {
     constructor(
         public readonly penaltyScore: number,
         public readonly driverId: number,

@@ -1,10 +1,9 @@
 import { DriverPenalty } from './driver-penalty';
 
 export const DriverPenalties = {
+    $id: 'DriverPenalties',
     type: 'array',
-    items: {
-        type: { $ref: DriverPenalty },
-    },
+    items: DriverPenalty,
 } as const;
 
 export const ResponseWithDriverPenalties = {

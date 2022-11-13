@@ -1,11 +1,10 @@
 import { ResponseWithDriverPenalties } from '../schemas/driver-penalties';
-import { JsonSchemaToTsProvider } from '@fastify/type-provider-json-schema-to-ts';
 import { findPenaltiesForDriver } from '../controllers/driver-penalties';
 import { DriverPenaltyModel } from '../model/driver-penalty';
-import { driverPenaltyModelToJson } from '../adapters/driver-penalty';
+import { TypeProvider } from 'src/schema-types/type-provider';
 
 export default async function routes(fastify: FastifyInstance) {
-    const f = fastify.withTypeProvider<JsonSchemaToTsProvider>();
+    const f = fastify.withTypeProvider<TypeProvider>();
 
     f.get(
         '/driver-penalties/',
@@ -24,9 +23,7 @@ export default async function routes(fastify: FastifyInstance) {
         async (request) => {
             const penalties: Array<DriverPenaltyModel> =
                 await findPenaltiesForDriver(request.query.driver_id);
-            return {
-                penalties: penalties.map(driverPenaltyModelToJson),
-            };
+            return { penalties };
         }
     );
 }

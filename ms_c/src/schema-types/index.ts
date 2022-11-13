@@ -1,29 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FromSchema } from 'json-schema-to-ts';
-import { ObjectId } from 'mongodb';
+import { FromSchema, JSONSchema } from 'json-schema-to-ts';
 import { DriverPenalty } from '../schemas/driver-penalty';
 import { TripStatus } from '../schemas/trip-status';
+import { FromSchemaOptions } from './from-schema-options';
 
-export type DriverPenalty = FromSchema<
-    typeof DriverPenalty,
-    {
-        deserialize: [
-            {
-                pattern: {
-                    type: 'string';
-                    format: 'date-time';
-                };
-                output: Date;
-            },
-            {
-                pattern: {
-                    type: 'string';
-                    format: 'object-id';
-                };
-                output: ObjectId;
-            }
-        ];
-    }
->;
+type SchemaType<S extends JSONSchema> = FromSchema<S, FromSchemaOptions>;
 
-export type TripStatus = FromSchema<typeof TripStatus>;
+export type DriverPenalty = SchemaType<typeof DriverPenalty>;
+
+export type TripStatus = SchemaType<typeof TripStatus>;

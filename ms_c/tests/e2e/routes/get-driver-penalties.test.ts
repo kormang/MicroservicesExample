@@ -8,7 +8,7 @@ describe('GET /driver-penalties/', () => {
     it('returns penalties for specified driver', async () => {
         const app = build();
 
-        await connectAndClearDb();
+        const {client, db} = await connectAndClearDb();
 
         // TODO: How about using fixtures?
         const date1 = new Date();
@@ -68,5 +68,7 @@ describe('GET /driver-penalties/', () => {
                 tripId: '03c8d031-4093-41e2-88e0-700cf78873ac',
             },
         ]);
+
+        client.close();
     });
 });

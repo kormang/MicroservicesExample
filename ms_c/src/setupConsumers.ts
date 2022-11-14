@@ -1,4 +1,4 @@
-import { AMQPConnection } from './ampq';
+import { AMQPConnection } from './amqp';
 import { TripStatusConsumer } from './consumers/trip_status';
 import { applyPenaltyByTripStatus } from './controllers/driver-penalties';
 

@@ -45,20 +45,28 @@ async function createPenaltiesCollection(db: mongoDB.Db) {
     });
 }
 
+function getConnectionString() {
+    const user = getConfig('MONGO_USER');
+    const pass = getConfig('MONGO_PASS');
+    const host = getConfig('MONGO_HOST');
+    const dbName = getConfig('MONGO_DBNAME');
+    return `mongodb://${user}:${pass}@${host}:27017/${dbName}?&authSource=admin`;
+}
+
 export async function connectToDatabase() {
-    const connStr = getConfig('MONGO_CONN_STR');
+    const connStr = getConnectionString();
     const client: mongoDB.MongoClient = new mongoDB.MongoClient(connStr);
 
     await client.connect();
 
-    const dbName = connStr.split('/').pop();
+    const dbName = getConfig('MONGO_DBNAME');
     const db: mongoDB.Db = client.db(dbName);
 
     await createPenaltiesCollection(db);
 
     console.log(`Successfully connected to database: ${db.databaseName}`);
 
-    return db;
+    return { client, db };
 }
 
 export function getCollections() {

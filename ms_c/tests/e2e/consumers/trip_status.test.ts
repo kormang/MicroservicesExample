@@ -2,17 +2,21 @@ import { DriverPenaltyModel } from '../../../src/model/driver-penalty';
 import { DriverPenalty } from '../../../src/schema-types';
 import { getCollections } from '../../../src/services/database.service';
 import { waitFor } from '../../utils';
-import { setupAmpqForTest } from '../../utils/ampq';
+import { setupAmqpForTest } from '../../utils/amqp';
 import { connectAndClearDb } from '../../utils/db';
+
+async function countPenalties() {
+    return await getCollections().penalties?.countDocuments();
+}
 
 describe('Trip status consumer', () => {
     it('consumes trip status and write it to db', async () => {
-        const [conn, amqpTestConnection] = await setupAmpqForTest();
-        await connectAndClearDb();
+        const [conn, amqpTestConnection] = await setupAmqpForTest();
+        const {client, db} = await connectAndClearDb();
         try {
-            expect(
-                await getCollections().penalties?.countDocuments()
-            ).toBeFalsy();
+            await db.createCollection('penalties');
+            console.log(await db.collections());
+            expect(await countPenalties()).toBeFalsy();
 
             const tripStatus = {
                 speed: 83,
@@ -27,9 +31,7 @@ describe('Trip status consumer', () => {
                 amqpTestConnection.send('trip_status', tripStatus)
             ).toBeTruthy();
 
-            const condition = async () =>
-                Number(await getCollections().penalties?.countDocuments()) ===
-                1;
+            const condition = async () => Number(await countPenalties()) === 1;
             await waitFor(condition);
 
             const penalties = await getCollections()
@@ -54,6 +56,7 @@ describe('Trip status consumer', () => {
         } finally {
             await amqpTestConnection.connection.close();
             await conn.connection.close();
+            client.close();
         }
     });
 });

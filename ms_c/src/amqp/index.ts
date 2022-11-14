@@ -1,13 +1,22 @@
 import amqplib from 'amqplib';
 import { getConfig } from '../utils/config';
 
+function getAmqpUri() {
+    const user = getConfig('AMQP_USER');
+    const pass = getConfig('AMQP_PASS');
+    const host = getConfig('AMQP_HOST');
+    const vhost = getConfig('AMQP_VHOST');
+    return `amqp://${user}:${pass}@${host}${vhost}`;
+}
+
 export class AMQPConnection {
     connection: amqplib.Connection;
     channel: amqplib.Channel;
 
     static async create() {
-        const ampqUri = getConfig('AMPQ_URI');
-        const connection = await amqplib.connect(ampqUri);
+        const amqpUri = getAmqpUri();
+        console.log('amqpUri', amqpUri);
+        const connection = await amqplib.connect(amqpUri);
         const channel = await connection.createChannel();
         return new AMQPConnection(connection, channel);
     }

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest tests",
     "dev": "ts-node src/server.ts",
     "build": "tsc",
     "compile-schemas": "json2ts -i src/schemas -o src/types"

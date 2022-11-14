@@ -53,11 +53,23 @@ async function createPenaltiesCollection(db: mongoDB.Db) {
     });
 }
 
+let _dbName = '';
+function getDbName() {
+    if (!_dbName) {
+        _dbName = getConfig('MONGO_DBNAME');
+        if (!_dbName) {
+            // Fallback to random name (for tests).
+            _dbName = 'test_msedb_' + Math.ceil(Math.random() * 10000000);
+        }
+    }
+    return _dbName;
+}
+
 function getConnectionString() {
     const user = getConfig('MONGO_USER');
     const pass = getConfig('MONGO_PASS');
     const host = getConfig('MONGO_HOST');
-    const dbName = getConfig('MONGO_DBNAME');
+    const dbName = getDbName();
     return `mongodb://${user}:${pass}@${host}:27017/${dbName}?&authSource=admin`;
 }
 
@@ -67,7 +79,7 @@ export async function connectToDatabase() {
 
     await client.connect();
 
-    const dbName = getConfig('MONGO_DBNAME');
+    const dbName = getDbName();
     const db: mongoDB.Db = client.db(dbName);
 
     await createPenaltiesCollection(db);

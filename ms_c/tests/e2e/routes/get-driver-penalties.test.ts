@@ -8,7 +8,7 @@ describe('GET /driver-penalties/', () => {
     it('returns penalties for specified driver', async () => {
         const app = build();
 
-        const {client, db} = await connectAndClearDb();
+        const { client } = await connectAndClearDb();
 
         // TODO: How about using fixtures?
         const date1 = new Date();

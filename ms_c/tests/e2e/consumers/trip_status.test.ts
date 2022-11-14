@@ -12,10 +12,8 @@ async function countPenalties() {
 describe('Trip status consumer', () => {
     it('consumes trip status and write it to db', async () => {
         const [conn, amqpTestConnection] = await setupAmqpForTest();
-        const {client, db} = await connectAndClearDb();
+        const { client } = await connectAndClearDb();
         try {
-            await db.createCollection('penalties');
-            console.log(await db.collections());
             expect(await countPenalties()).toBeFalsy();
 
             const tripStatus = {

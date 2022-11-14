@@ -15,7 +15,6 @@ export class AMQPConnection {
 
     static async create() {
         const amqpUri = getAmqpUri();
-        console.log('amqpUri', amqpUri);
         const connection = await amqplib.connect(amqpUri);
         const channel = await connection.createChannel();
         return new AMQPConnection(connection, channel);

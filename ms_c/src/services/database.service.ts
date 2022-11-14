@@ -5,6 +5,14 @@ const collections: { penalties?: mongoDB.Collection } = {};
 
 async function createPenaltiesCollection(db: mongoDB.Db) {
     const collName = 'penalties';
+
+    // By default collections are really created on first insert.
+    // But to simplify tests, create collection immediatelly.
+    const allCollNames = (await db.collections()).map((c) => c.collectionName);
+    if (!allCollNames.includes(collName)) {
+        await db.createCollection(collName);
+    }
+
     const penaltiesCollection: mongoDB.Collection = db.collection(collName);
 
     collections.penalties = penaltiesCollection;

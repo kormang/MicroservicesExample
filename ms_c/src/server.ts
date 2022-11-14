@@ -1,11 +1,11 @@
 import build from './app';
-import { connectToDatabase } from './services/database.service';
+import { connectAndInitDatabase } from './services/database.service';
 import { setupMessageConsumers } from './setupConsumers';
 
 const start = async (): Promise<void> => {
     const app = build();
     try {
-        await connectToDatabase();
+        await connectAndInitDatabase();
         await setupMessageConsumers();
         await app.listen({ port: 3000 });
     } catch (err) {

@@ -54,11 +54,13 @@ async function createPenaltiesCollection(db: mongoDB.Db) {
 }
 
 let _dbName = '';
-function getDbName() {
+export function getDbName() {
     if (!_dbName) {
         _dbName = getConfig('MONGO_DBNAME');
         if (!_dbName) {
             // Fallback to random name (for tests).
+            // TODO: Implement this so that db is deleted when tests finish,
+            // for example using global afterAll.
             _dbName = 'test_msedb_' + Math.ceil(Math.random() * 10000000);
         }
     }
@@ -78,6 +80,12 @@ export async function connectToDatabase() {
     const client: mongoDB.MongoClient = new mongoDB.MongoClient(connStr);
 
     await client.connect();
+
+    return client;
+}
+
+export async function connectAndInitDatabase() {
+    const client = await connectToDatabase();
 
     const dbName = getDbName();
     const db: mongoDB.Db = client.db(dbName);

@@ -1,5 +1,5 @@
-import { DriverPenalty, TripStatus } from '../schema-types';
-import { calculatePenaltyScore } from './penalty-calc';
+import { DriverPenalty, TripStatus } from '../schemaTypes';
+import { calculatePenaltyScore } from './penaltyCalc';
 
 export function tripStatusToDriverPenalty(
     tripStatus: TripStatus

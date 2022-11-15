@@ -1,6 +1,6 @@
 import { AMQPConnection } from '../amqp';
-import { validateTripStatus } from '../schema-validators';
-import { TripStatus } from '../schema-types/index';
+import { validateTripStatus } from '../schemaValidators';
+import { TripStatus } from '../schemaTypes/index';
 
 export class TripStatusConsumer {
     constructor(

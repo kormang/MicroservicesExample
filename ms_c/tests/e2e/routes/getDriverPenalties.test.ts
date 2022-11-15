@@ -1,5 +1,5 @@
 import build from '../../../src/app';
-import { DriverPenaltyModel } from '../../../src/model/driver-penalty';
+import { DriverPenaltyModel } from '../../../src/model/driverPenalty';
 import { ObjectId } from 'mongodb';
 import { getCollections } from '../../../src/services/database.service';
 import { connectAndClearDb } from '../../utils/db';

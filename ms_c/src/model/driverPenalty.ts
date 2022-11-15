@@ -1,4 +1,4 @@
-import { DriverPenalty } from '../schema-types';
+import { DriverPenalty } from '../schemaTypes';
 import { ObjectId } from 'mongodb';
 
 export class DriverPenaltyModel {

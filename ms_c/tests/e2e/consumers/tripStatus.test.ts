@@ -1,5 +1,3 @@
-import { DriverPenaltyModel } from '../../../src/model/driver-penalty';
-import { DriverPenalty } from '../../../src/schema-types';
 import { getCollections } from '../../../src/services/database.service';
 import { waitFor } from '../../utils';
 import { setupAmqpForTest } from '../../utils/amqp';

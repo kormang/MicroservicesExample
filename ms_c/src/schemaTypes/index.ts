@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FromSchema, JSONSchema } from 'json-schema-to-ts';
-import { DriverPenalty } from '../schemas/driver-penalty';
-import { TripStatus } from '../schemas/trip-status';
-import { FromSchemaOptions } from './from-schema-options';
+import { DriverPenalty } from '../schemas/driverPenalty';
+import { TripStatus } from '../schemas/tripStatus';
+import { FromSchemaOptions } from './fromSchemaOptions';
 
 type SchemaType<S extends JSONSchema> = FromSchema<S, FromSchemaOptions>;
 

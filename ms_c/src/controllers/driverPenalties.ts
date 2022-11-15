@@ -1,6 +1,6 @@
-import { DriverPenaltyModel } from '../model/driver-penalty';
+import { DriverPenaltyModel } from '../model/driverPenalty';
 import { tripStatusToDriverPenalty } from '../policies';
-import { TripStatus } from '../schema-types';
+import { TripStatus } from '../schemaTypes';
 import { getCollections } from '../services/database.service';
 
 export function findPenaltiesForDriver(driverId: number) {

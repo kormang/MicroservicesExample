@@ -1,4 +1,4 @@
-import { DriverPenalty } from './driver-penalty';
+import { DriverPenalty } from './driverPenalty';
 
 export const DriverPenalties = {
     $id: 'DriverPenalties',

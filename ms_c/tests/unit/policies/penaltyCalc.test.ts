@@ -1,4 +1,4 @@
-import { calculatePenaltyScore } from '../../../src/policies/penalty-calc';
+import { calculatePenaltyScore } from '../../../src/policies/penaltyCalc';
 
 describe('calculatePenaltyScore', () => {
     it('returns 0 when speed is below min penalty', () => {

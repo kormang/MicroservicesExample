@@ -1,6 +1,6 @@
 import { AMQPConnection } from './amqp';
-import { TripStatusConsumer } from './consumers/trip_status';
-import { applyPenaltyByTripStatus } from './controllers/driver-penalties';
+import { TripStatusConsumer } from './consumers/tripStatus';
+import { applyPenaltyByTripStatus } from './controllers/driverPenalties';
 
 export async function setupMessageConsumers() {
     const conn = await AMQPConnection.create();

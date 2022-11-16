@@ -4,6 +4,7 @@ import pika
 from service.dataconverters import TripStatusEncoder
 from service.simulator import simulator
 from service.dataobjects import TripStatus
+from django.conf import settings
 
 TRIP_STATUS_QUEUE_NAME = 'trip_status'
 
@@ -13,13 +14,15 @@ class Gateway:
     def __init__(self):
         self.connection = pika.BlockingConnection(
             pika.ConnectionParameters(
-                'localhost', heartbeat=600, blocked_connection_timeout=300
+                settings.AMQP_HOST, heartbeat=600, blocked_connection_timeout=300,
+                virtual_host=settings.AMQP_VHOST,
+                credentials=pika.PlainCredentials(settings.AMQP_USER, settings.AMQP_PASS)
             )
         )
 
         self.channel = self.connection.channel()
 
-        self.channel.queue_declare(queue=TRIP_STATUS_QUEUE_NAME)
+        self.channel.queue_declare(queue=TRIP_STATUS_QUEUE_NAME, durable=True)
 
     def publish(self, queue, json_body):
         print('publish', json_body)

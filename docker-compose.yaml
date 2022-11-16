@@ -1,5 +1,16 @@
 version: "3.9"
 services:
+  postgres:
+    image: postgres:12.13-alpine
+    volumes:
+      - postgres_volume:/var/lib/postgresql
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+
   rabbitmq:
     image: rabbitmq:3.10-management
     restart: unless-stopped
@@ -11,7 +22,7 @@ services:
       - RABBITMQ_DEFAULT_PASS=${AMQP_PASS}
 
   mongo:
-    image: mongo
+    image: mongo:6.0-focal
     restart: unless-stopped
     ports:
       - "27017:27017"
@@ -19,3 +30,67 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASS}
       - MONGO_INITDB_DATABASE=${MONGO_DBNAME}
+
+
+  ms_a:
+    build: ./ms_a
+    image: ms_a:dev
+    restart: unless-stopped
+    # volumes:
+    #   - ./ms_a:/opt/project
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - AMQP_HOST=${AMQP_HOST}
+      - AMQP_VHOST=${AMQP_VHOST}
+      - AMQP_USER=${AMQP_USER}
+      - AMQP_PASS=${AMQP_PASS}
+
+
+  ms_b:
+    build: ./ms_b
+    image: ms_b:dev
+    # volumes:
+    #   - ./ms_b:/opt/project
+    ports:
+      - "8001:8000"
+    depends_on:
+      - rabbitmq
+    environment:
+      - AMQP_HOST=${AMQP_HOST}
+      - AMQP_VHOST=${AMQP_VHOST}
+      - AMQP_USER=${AMQP_USER}
+      - AMQP_PASS=${AMQP_PASS}
+
+  ms_c:
+    build: ./ms_c
+    image: ms_c:dev
+    restart: unless-stopped
+    # volumes:
+    #   - ./ms_c:/opt/project
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+      - rabbitmq
+    environment:
+      - AMQP_HOST=${AMQP_HOST}
+      - AMQP_VHOST=${AMQP_VHOST}
+      - AMQP_USER=${AMQP_USER}
+      - AMQP_PASS=${AMQP_PASS}
+      - MONGO_HOST=${MONGO_HOST}
+      - MONGO_USER=${MONGO_USER}
+      - MONGO_PASS=${MONGO_PASS}
+      - MONGO_DBNAME=${MONGO_DBNAME}
+
+volumes:
+  postgres_volume: {}

@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+
+def get_config(key):
+    return os.environ[key]
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -128,3 +132,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
+
+AMQP_HOST = get_config('AMQP_HOST')
+AMQP_VHOST = get_config('AMQP_VHOST')
+AMQP_USER = get_config('AMQP_USER')
+AMQP_PASS = get_config('AMQP_PASS')

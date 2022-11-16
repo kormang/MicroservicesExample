@@ -31,6 +31,11 @@ Making project with 3 different microservices, allows to learn quite a few techn
     environment variables, and testing.
 
 
+The list may be subject to expansion.
+
+Non-goal: To make everything perfect (make just some things (close to) perfect).
+
+
 ## The idea
 
 The idea comes from interview assignment one of my friends had to solve recently. I've adopted it a little bit, to meet my learning needs.

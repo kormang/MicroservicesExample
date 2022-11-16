@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+
+def get_config(key):
+    return os.environ[key]
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,9 +25,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# TODO: Move this to env
 SECRET_KEY = 'django-insecure-_4$#r+#rdymyy#2k2m47wi@@yk_m-gs_kzohluq@tocc&v$ej9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# TODO: Move this to env
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -78,10 +85,10 @@ WSGI_APPLICATION = 'ms_a.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'usex_a',
-        'USERNAME': 'marko',
-        'PASSWORD': 'qwert321',
-        'HOST': 'localhost',
+        'NAME': get_config('POSTGRES_DB'),
+        'USER': get_config('POSTGRES_USER'),
+        'PASSWORD': get_config('POSTGRES_PASSWORD'),
+        'HOST': get_config('POSTGRES_HOST'),
         'PORT': '5432',
     }
 }
@@ -131,3 +138,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
+
+AMQP_HOST = get_config('AMQP_HOST')
+AMQP_VHOST = get_config('AMQP_VHOST')
+AMQP_USER = get_config('AMQP_USER')
+AMQP_PASS = get_config('AMQP_PASS')

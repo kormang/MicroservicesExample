@@ -1,8 +1,8 @@
 
 import json
 import pika
-
 import sys
+from django.conf import settings
 
 TESTING = sys.argv[1:2] == ['test']
 
@@ -16,7 +16,9 @@ else:
         def __init__(self):
             self.connection = pika.BlockingConnection(
                 pika.ConnectionParameters(
-                    'localhost', heartbeat=600, blocked_connection_timeout=300
+                    settings.AMQP_HOST, heartbeat=600, blocked_connection_timeout=300,
+                    virtual_host=settings.AMQP_VHOST,
+                    credentials=pika.PlainCredentials(settings.AMQP_USER, settings.AMQP_PASS)
                 )
             )
 

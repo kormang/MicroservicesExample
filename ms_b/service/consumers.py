@@ -4,6 +4,7 @@ from threading import Thread
 import pika
 from service.dataconverters import TripDecoder, trip_from_dict
 from service.trips_manager import tripsManager
+from django.conf import settings
 
 
 TRIPS_QUEUE_NAME = 'trips'
@@ -13,7 +14,9 @@ class Gateway:
     def __init__(self, queue_receiver_callback):
         self.connection = pika.BlockingConnection(
             pika.ConnectionParameters(
-                'localhost', heartbeat=600, blocked_connection_timeout=300
+                settings.AMQP_HOST, heartbeat=600, blocked_connection_timeout=300,
+                virtual_host=settings.AMQP_VHOST,
+                credentials=pika.PlainCredentials(settings.AMQP_USER, settings.AMQP_PASS)
             )
         )
 

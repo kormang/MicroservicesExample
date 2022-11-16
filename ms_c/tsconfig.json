@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "rootDir": ".",
+    "paths": {
+      "src/*": ["./src/*"]
+    },
     "module": "commonjs",
     "esModuleInterop": true,
     "target": "es6",
@@ -10,8 +12,9 @@
     "outDir": "dist",
     "strict": true
   },
-  "paths": {
-    "*": ["types/*.d.ts"]
+  "ts-node": {
+    "files": true,
+    "require": ["tsconfig-paths/register"]
   },
   "lib": ["es2015"]
 }

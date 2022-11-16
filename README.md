@@ -16,7 +16,8 @@ Making project with 3 different microservices, allows to learn quite a few techn
 * Fastify 4 with TypeScript
     * Previous knowledge: Experience working on project with Fastify 2 with TypeScript.
     * Learning goal: Deepen my knowledge of TypeScript's type system and try out Fastify 4, with type providers, with focus on JSON Schema and
-    reusing schema for validation and type definitions too.
+    reusing schema for validation and type definitions too. Also tsc, ts-node,
+    and jest configuration, and absolute module imports.
 
 * RabbitMQ
     * Previous knowledge: Some experience with message queueing, using AWS SQS.
@@ -28,7 +29,6 @@ Making project with 3 different microservices, allows to learn quite a few techn
     * Learning goal: Remind myself of writing docker-compose.yaml.
     Expand understading of dockerization process, with focus on configuration,
     environment variables, and testing.
-
 
 
 ## The idea

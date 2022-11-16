@@ -1,6 +1,6 @@
-import { ResponseWithDriverPenalties } from '../schemas/driverPenalties';
-import { findPenaltiesForDriver } from '../controllers/driverPenalties';
-import { DriverPenaltyModel } from '../model/driverPenalty';
+import { ResponseWithDriverPenalties } from 'src/schemas/driverPenalties';
+import { findPenaltiesForDriver } from 'src/controllers/driverPenalties';
+import { DriverPenaltyModel } from 'src/model/driverPenalty';
 import { TypeProvider } from 'src/schemaTypes/typeProvider';
 
 export default async function routes(fastify: FastifyInstance) {

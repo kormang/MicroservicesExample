@@ -9,7 +9,7 @@ const start = async (): Promise<void> => {
         await setupMessageConsumers();
         await app.listen({ port: 3000 });
     } catch (err) {
-        app.log.error(err);
+        console.error(err);
     }
 };
 // eslint-disable-next-line @typescript-eslint/no-floating-promises

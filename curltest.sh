@@ -1,7 +1,7 @@
 #! /bin/bash
 
 echo "=============== CREATE CAR AND DRIVER ================="
-curl -i -X POST http://localhost:8000/cars/ -H "Content-Type: application/json" -H "Accept: application/json" --data '{"name":"Mercedes"}'
+curl -i -X POST http://localhost:8000/cars/ -H "Content-Type: application/json" -H "Accept: application/json" --data '{"model":"Mercedes"}'
 curl -i -X POST http://localhost:8000/drivers/ -H "Content-Type: application/json" -H "Accept: application/json" --data '{"name":"Rastko"}'
 
 echo "=============== GET CAR AND DRIVER ================="
@@ -10,7 +10,7 @@ curl -i -X GET http://localhost:8000/drivers/ -H "Content-Type: application/json
 
 echo "=============== CREATE TRIP AND ASSIGN DRIVER TO CAR ================="
 curl -i -X POST http://localhost:8000/trips/ -H "Content-Type: application/json" -H "Accept: application/json" --data '{"driver_id":1, "car_id": 1}'
-curl -i -X PUT http://localhost:8000/trips/assign_driver/ -H "Content-Type: application/json" -H "Accept: application/json" --data '{"driver_id":1, "car_id": 1}'
+curl -i -X PUT http://localhost:8000/assign_driver/ -H "Content-Type: application/json" -H "Accept: application/json" --data '{"driver_id":1, "car_id": 1}'
 
 sleep 10
 
@@ -20,7 +20,7 @@ curl -i -X GET http://localhost:8001/trips/ -H "Content-Type: application/json" 
 sleep 60
 
 echo "=============== END TRIP (TODO: ID is random, needs to be inserted) ================="
-curl -i -X PUT http://localhost:8000/trips/end_trip/7147cc2d-bb81-4857-8ba2-965e9de00c7f/ -H "Content-Type: application/json" -H "Accept: application/json"
+curl -i -X PUT http://localhost:8000/trips/end_trip/b2bf7a94-d360-4ff5-b0a3-d7f63e71b571/ -H "Content-Type: application/json" -H "Accept: application/json"
 
 
 echo "=============== GET PENALTIES FOR DRIVER ================="

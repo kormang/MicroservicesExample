@@ -47,3 +47,8 @@ There should be three microservices, they should communicate using RabbitMQ, and
 
 Learning multiple things simultaniously, ad hoc, is difficult, and leaves a lot of wholes, especially when it comes to best practices and all the available options. Just as blindly fallowing courses or tutorials doesn't provide deeper understanding of things that only become obvious when your intentions go wrong.
 
+## How to run it?
+
+```docker compose up```
+
+Then find curl commands in `curltest.sh` and run them manually, it see how it works.

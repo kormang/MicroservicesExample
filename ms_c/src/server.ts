@@ -7,7 +7,7 @@ const start = async (): Promise<void> => {
     try {
         await connectAndInitDatabase();
         await setupMessageConsumers();
-        await app.listen({ port: 3000 });
+        await app.listen({ host: '0.0.0.0', port: 3000 });
     } catch (err) {
         console.error(err);
     }

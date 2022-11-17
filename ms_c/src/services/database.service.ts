@@ -45,7 +45,7 @@ async function createPenaltiesCollection(db: mongoDB.Db) {
                         bsonType: 'string',
                     },
                     createdAt: {
-                        bsonType: 'string',
+                        bsonType: 'date',
                     },
                 },
             },
